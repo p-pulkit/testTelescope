@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers;
 use App\Events\NewPost;
 use App\Jobs\SyncMedia;
 use App\Mail\ReviewPost;
+use App\Models\Comments;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -33,6 +34,19 @@ final class PostControllerTest extends TestCase
         $response->assertOk();
         $response->assertViewIs('post.index');
         $response->assertViewHas('posts');
+    }
+
+
+    #[Test]
+    public function create_displays_view(): void
+    {
+        $post = User::factory()->create();
+
+        $response = $this->get(route('posts.create'));
+
+        $response->assertOk();
+        $response->assertViewIs('post.create');
+        $response->assertViewHas('user');
     }
 
 
@@ -90,7 +104,7 @@ final class PostControllerTest extends TestCase
     public function show_displays_view(): void
     {
         $post = Post::factory()->create();
-        $posts = Post::factory()->count(3)->create();
+        $post = Comments::factory()->create();
 
         $response = $this->get(route('posts.show', $post));
 

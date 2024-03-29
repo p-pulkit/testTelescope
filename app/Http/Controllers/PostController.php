@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Comments;
 use App\Events\NewPost;
 use App\Http\Requests\PostStoreRequest;
 use App\Jobs\SyncMedia;
 use App\Mail\ReviewPost;
 use App\Models\Post;
+use App\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -19,6 +21,13 @@ class PostController extends Controller
         $posts = Post::all();
 
         return view('post.index', compact('posts'));
+    }
+
+    public function create(Request $request): View
+    {
+        $user = User::find($id);
+
+        return view('post.create', compact('user'));
     }
 
     public function store(PostStoreRequest $request): RedirectResponse
@@ -38,7 +47,7 @@ class PostController extends Controller
 
     public function show(Request $request, Post $post): View
     {
-        $posts = Post::all();
+        $comments = Comments::find($post_id);
 
         return view('post.show', compact('post', 'comments'));
     }
