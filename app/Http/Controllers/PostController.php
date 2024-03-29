@@ -35,4 +35,11 @@ class PostController extends Controller
 
         return redirect()->route('posts.index');
     }
+
+    public function show(Request $request, Post $post): View
+    {
+        $posts = Post::all();
+
+        return view('post.show', compact('post', 'comments'));
+    }
 }

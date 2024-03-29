@@ -84,4 +84,19 @@ final class PostControllerTest extends TestCase
             return $event->post->is($post);
         });
     }
+
+
+    #[Test]
+    public function show_displays_view(): void
+    {
+        $post = Post::factory()->create();
+        $posts = Post::factory()->count(3)->create();
+
+        $response = $this->get(route('posts.show', $post));
+
+        $response->assertOk();
+        $response->assertViewIs('post.show');
+        $response->assertViewHas('post');
+        $response->assertViewHas('comments');
+    }
 }
